@@ -1,0 +1,29 @@
+[33mcommit 810cb349ca60d0a6d28b9a01692c119906735263[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: kolobolo320 <adsasd@gmail.com>
+Date:   Sun Dec 3 09:26:43 2017 +0100
+
+    add show.ejs
+
+[33mcommit 815111df7873d2fe8df59c04f558589216b79808[m
+Author: kolobolo320 <adsasd@gmail.com>
+Date:   Sun Dec 3 08:19:03 2017 +0100
+
+    add new.ejs
+
+[33mcommit 4c2f6c5a78d62b2f178c7a27174591b6214717a5[m
+Author: kolobolo320 <adsasd@gmail.com>
+Date:   Sat Dec 2 20:52:12 2017 +0100
+
+    add semantic ui - layout
+
+[33mcommit 222d2fc30e8ee3aa52843fbbc0b8074d7800e25c[m
+Author: kolobolo320 <adsasd@gmail.com>
+Date:   Sat Dec 2 20:32:31 2017 +0100
+
+    show basic index
+
+[33mcommit 461322dc033efe8cc17fe752290fcab33a372d52[m
+Author: kolobolo320 <adsasd@gmail.com>
+Date:   Sat Dec 2 20:12:20 2017 +0100
+
+    initial commit
