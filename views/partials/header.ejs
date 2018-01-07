@@ -9,9 +9,18 @@
 	<div class="ui fixed inverted menu">
 		<div class="ui container">
 			<div class="header item">Lorem Cafe Blog</div>
-
-			<a href="/" class="item">Strona Główna</a>
-			<a href="/blogs/new"class="item">Nowy post</a>
+				<a href="/" class="item">Home</a>
+				<a href="/blogs/new"class="item">New Post</a>
+				<div class="right menu">
+				<% if(!currentUser){ %>
+					<a href="/login" class="item">Login</a>
+					<a href="/register" class="item">Sign Up</a>
+				<% } else { %>
+					<a href="" class="item">Logged in as 
+					<%= currentUser.username %></a>	
+					<a href="/logout" class="item">Logout</a>
+				<% } %>
+				</div>
+			</div>				
 		</div>
 	</div>
-

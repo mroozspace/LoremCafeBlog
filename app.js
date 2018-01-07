@@ -29,6 +29,10 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(function(req, res, next){
+	res.locals.currentUser = req.user;
+	next();
+});
 
 //mongoose model config
 var blogSchema = new mongoose.Schema({
@@ -49,13 +53,13 @@ app.get("/blogs", function(req, res){
 		if(err){
 			console.log("error");
 		} else {
-			res.render("index", {blogs: blogs});
+			res.render("index", {blogs: blogs, currentUser : req.user});
 		}
 	});
 });
 
 //  new route 
-app.get("/blogs/new", function(req, res){
+app.get("/blogs/new", isLoggedIn, function(req, res){
 	res.render("new");
 });
 //  create route
@@ -155,7 +159,19 @@ app.post("/login", passport.authenticate("local",
 	}), function(req, res){
 });
 
+// logout logic
+app.get("/logout", function(req, res){
+	req.logout();
+	res.redirect("/blogs");
+});
+
+function isLoggedIn(req, res, next){
+	if(req.isAuthenticated()){
+		return next();
+	}
+	res.redirect("/login");
+}
+
 app.listen(3001, function(){
 	console.log("Server is running on port 3001 ... ");
 });
-
