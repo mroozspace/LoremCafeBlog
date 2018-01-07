@@ -126,7 +126,7 @@ app.delete("/blogs/:id", function(req,res){
 // show register form
 app.get("/register", function(req,res){
 	res.render("register");
-})
+});
 // sign up logic
 app.post("/register", function(req,res){
 	var newUser = new User({username: req.body.username});
@@ -137,8 +137,22 @@ app.post("/register", function(req,res){
 		}
 		passport.authenticate("local")(req, res, function(){
 			res.redirect("/blogs");
-		})
-	})
+		});
+	});
+});
+
+// show login form
+app.get("/login", function(req, res){
+	res.render("login");
+});
+
+// login logic
+// app.post("/login",middleware, callback)
+app.post("/login", passport.authenticate("local",
+	{
+		successRedirect:"/blogs",
+		failureRedirect:"/login"
+	}), function(req, res){
 });
 
 app.listen(3001, function(){
