@@ -1,9 +1,12 @@
-var bodyParser = require("body-parser"),
-	methodOverride = require("method-override"),
+var bodyParser 		= require("body-parser"),
+	methodOverride 	= require("method-override"),
 	expressSanitizer = require("express-sanitizer"),
-	mongoose = require("mongoose"),
-	express = require("express"),
-	app = express();
+	passport		= require("passport"),
+	LocalStrategy	= require("passport-local"),
+	User  			= require("./models/user"),
+	mongoose 		= require("mongoose"),
+	express 		= require("express"),
+	app 			= express();
 
 // app config
 mongoose.connect("mongodb://localhost/blog-user");
@@ -12,6 +15,20 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
+
+// passport config
+app.use(require("express-session")({
+	secret: "secret thing",
+	resave: false,
+	saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 //mongoose model config
 var blogSchema = new mongoose.Schema({
@@ -104,7 +121,27 @@ app.delete("/blogs/:id", function(req,res){
 // 	body: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam deleniti, dicta vel fugiat commodi exercitationem tenetur fuga culpa consequatur amet, sequi esse repudiandae repellendus corrupti quisquam sint maiores aspernatur."
 // });
 
-app.listen(3000, function(){
-	console.log("Server is running on port 3000 ... ");
+//  auth routes
+
+// show register form
+app.get("/register", function(req,res){
+	res.render("register");
+})
+// sign up logic
+app.post("/register", function(req,res){
+	var newUser = new User({username: req.body.username});
+	User.register(newUser, req.body.password, function(err, user){
+		if(err){
+			console.log(err);
+			return res.render("register")
+		}
+		passport.authenticate("local")(req, res, function(){
+			res.redirect("/blogs");
+		})
+	})
+});
+
+app.listen(3001, function(){
+	console.log("Server is running on port 3001 ... ");
 });
 
