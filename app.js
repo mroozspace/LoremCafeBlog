@@ -6,14 +6,16 @@ var bodyParser 		= require("body-parser"),
 	User  			= require("./models/user"),
 	mongoose 		= require("mongoose"),
 	Blog 			= require("./models/blog"),
+	Comment 		= require("./models/comment"),
 	seedDB			= require("./seeds"),
 	express 		= require("express"),
 	flash			= require("connect-flash"),
 	app 			= express();
 
+var commentRoutes	= require("./routes/comments"),
+	blogRoutes		= require("./routes/blogs"),
+	indexRoutes		= require("./routes/index");
 
-// Seed database
-seedDB();
 // app config
 mongoose.connect("mongodb://localhost/blog-user");
 app.set("view engine", "ejs");
@@ -22,6 +24,9 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
 app.use(flash());
+
+// Seed database
+// seedDB();
 
 // passport config
 app.use(require("express-session")({
@@ -41,136 +46,16 @@ app.use(function(req, res, next){
 	next();
 });
 
-
-
-app.get("/", function(req, res){
-	res.redirect("/blogs");
-});
-
-// index route
-app.get("/blogs", function(req, res){
-	Blog.find({}, function(err, blogs){
-		if(err){
-			console.log("error");
-		} else {
-			res.render("index", {blogs: blogs, currentUser : req.user});
-		}
-	});
-});
-
-//  new route 
-app.get("/blogs/new", isLoggedIn, function(req, res){
-	res.render("new");
-});
-//  create route
-app.post("/blogs", function(req, res){
-	req.body.blog.body = req.sanitize(req.body.blog.body)
-	//create blog
-	Blog.create(req.body.blog, function(err, newBlog){ //add mongoose model
-		if(err){
-			res.render("new");
-		} else { 
-			//redirect
-			res.redirect("/blogs");
-		}
-	});
-});
-
-//  show route
-app.get("/blogs/:id", function(req, res){
-	Blog.findById(req.params.id, function(err, foundBlog){
-	if(err){
-		res.redirect("/blogs");
-	} else {
-		res.render("show", {blog: foundBlog});
-	}
-	});
-});
-
-//  edit route 
-app.get("/blogs/:id/edit", function(req, res){
-	Blog.findById(req.params.id, function(err, foundBlog){
-	if(err){
-	res.redirect("/blogs");
-	} else {
-	res.render("edit", {blog: foundBlog});
-	}
-	});
-});
-
-//  update route
-app.put("/blogs/:id", function(req, res){
-	Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
-		if(err){
-			res.redirect("/blogs");
-		} else {
-			res.redirect("/blogs/" + req.params.id);
-		}
-	});
-});
-
-//  delete route
-app.delete("/blogs/:id", function(req,res){
-	Blog.findByIdAndRemove(req.params.id, function(err){
-		if(err){
-			res.redirect("/blogs");
-		} else {
-			res.redirect("/blogs");
-		}
-	})
-});
+// test blog create 
 // Blog.create({
 // 	title: "Test Blog",
 // 	image: "https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png",
 // 	body: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam deleniti, dicta vel fugiat commodi exercitationem tenetur fuga culpa consequatur amet, sequi esse repudiandae repellendus corrupti quisquam sint maiores aspernatur."
 // });
 
-//  auth routes
-
-// show register form
-app.get("/register", function(req,res){
-	res.render("register");
-});
-// sign up logic
-app.post("/register", function(req,res){
-	var newUser = new User({username: req.body.username});
-	User.register(newUser, req.body.password, function(err, user){
-		if(err){
-			console.log(err);
-			return res.render("register")
-		}
-		passport.authenticate("local")(req, res, function(){
-			res.redirect("/blogs");
-		});
-	});
-});
-
-// show login form
-app.get("/login", function(req, res){
-	res.render("login");
-});
-
-// login logic
-// app.post("/login",middleware, callback)
-app.post("/login", passport.authenticate("local",
-	{
-		successRedirect:"/blogs",
-		failureRedirect:"/login"
-	}), function(req, res){
-});
-
-// logout logic
-app.get("/logout", function(req, res){
-	req.logout();
-	res.redirect("/blogs");
-});
-
-function isLoggedIn(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	}
-	res.redirect("/login");
-}
+app.use(indexRoutes);
+app.use(commentRoutes);
+app.use(blogRoutes);
 
 app.listen(3001, function(){
 	console.log("Server is running on port 3001 ... ");

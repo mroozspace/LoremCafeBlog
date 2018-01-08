@@ -1,4 +1,4 @@
-<% include partials/header %>
+<% include ../partials/header %>
 <div class="ui main text container segment">
 	<div class="ui huge header">Edytuj <%=blog.title%></div>
 <form class="ui form" action="/blogs/<%=blog._id%>?_method=PUT" method="POST">
@@ -20,4 +20,4 @@
 </form>
 </div>
 <!-- test -->
-<% include partials/footer %>
+<% include ../partials/footer %>

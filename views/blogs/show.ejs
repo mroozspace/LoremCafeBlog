@@ -1,0 +1,55 @@
+<% include ../partials/header %>
+
+<div class="ui main text container segment">
+
+	<div class="ui huge header">
+		<%= blog.title %>
+	</div>
+
+	<div class="ui top attached">
+		<div class="item">
+			<img class="ui centered rounded image" src='<%=blog.image%>'>				
+		</div>
+	</div>
+	<div class="content">
+		<span>
+			<%= blog.created.toDateString() %>
+		</span>	
+	</div>
+	<div class="content">
+		<span>
+			<em>Created by : <%= blog.author.username %></em>
+		</span>	
+	</div>
+	<div class="description">
+		<p>
+		<%=blog.body%>	
+		</p>
+	</div>
+	<div class="ui comments">
+		<h3 class="ui dividing header">Comments</h3>
+		<% blog.comments.forEach(function(comment){ %>
+			<div class="comment">
+				<a class="author">
+					<%= comment.author.username %>
+				</a>
+				<div class="meta">
+					<span class="date"><%=comment.created.toDateString()%></span>
+				</div>
+				<div class="text">
+					<%= comment.text %> 
+				</div>
+			</div>
+		<% }); %>
+
+	</div>
+	<a class="ui baisc button" href="/blogs/<%=blog._id%>/comments/new">Add Comment</a>
+	<a id="edit" class="ui orange basic button" href="/blogs/<%=blog._id%>/edit">Edytuj</a>
+	<form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+		<button class="ui red basic button">Usuń</button>
+	</form>
+</div>
+
+
+
+<% include ../partials/footer %>

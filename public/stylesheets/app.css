@@ -1,9 +1,19 @@
+*{
+	box-sizing: border-box;
+}
+
 .container.main{
 	margin-top: 4.0em;
 }
 
+div.comment:nth-of-type(2){
+	background-color: #ffe !important;
+}
+
 img{
 	max-width: 50vh;
+	max-height: 25vh;
+	object-fit:cover;
 }
 
 textarea{
