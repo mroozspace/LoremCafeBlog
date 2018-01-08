@@ -5,9 +5,15 @@ var bodyParser 		= require("body-parser"),
 	LocalStrategy	= require("passport-local"),
 	User  			= require("./models/user"),
 	mongoose 		= require("mongoose"),
+	Blog 			= require("./models/blog"),
+	seedDB			= require("./seeds"),
 	express 		= require("express"),
+	flash			= require("connect-flash"),
 	app 			= express();
 
+
+// Seed database
+seedDB();
 // app config
 mongoose.connect("mongodb://localhost/blog-user");
 app.set("view engine", "ejs");
@@ -15,6 +21,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
+app.use(flash());
 
 // passport config
 app.use(require("express-session")({
@@ -34,14 +41,7 @@ app.use(function(req, res, next){
 	next();
 });
 
-//mongoose model config
-var blogSchema = new mongoose.Schema({
-	title: String,
-	image: String,
-	body: String,
-	created: {type: Date, default: Date.now}
-});
-var Blog = mongoose.model("Blog", blogSchema);
+
 
 app.get("/", function(req, res){
 	res.redirect("/blogs");
