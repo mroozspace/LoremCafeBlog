@@ -44,10 +44,13 @@
 
 	</div>
 	<a class="ui baisc button" href="/blogs/<%=blog._id%>/comments/new">Add Comment</a>
-	<a id="edit" class="ui orange basic button" href="/blogs/<%=blog._id%>/edit">Edytuj</a>
-	<form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
-		<button class="ui red basic button">Usuń</button>
-	</form>
+	<% if(currentUser && blog.author.id.equals(currentUser._id)){ %>
+		<a id="edit" class="ui orange basic button" href="/blogs/<%=blog._id%>/edit">Edit</a>
+		<form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+			<button class="ui red basic button">Delete</button>
+		</form>
+	<% } %>
+
 </div>
 
 
