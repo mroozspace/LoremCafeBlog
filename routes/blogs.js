@@ -1,5 +1,6 @@
 var express = require("express"),
-	router	= express.Router();
+	router	= express.Router(),
+	middleware = require("../middleware");
 
 var Blog 	= require("../models/blog");
 
@@ -15,7 +16,7 @@ router.get("/blogs", function(req, res){
 });
 
 //  new route 
-router.get("/blogs/new", isLoggedIn, function(req, res){
+router.get("/blogs/new", middleware.isLoggedIn, function(req, res){
 	res.render("blogs/new");
 });
 //  create route
@@ -51,14 +52,14 @@ router.get("/blogs/:id", function(req, res){
 });
 
 //  edit route 
-router.get("/blogs/:id/edit", checkBlogOwnership, function(req, res){
+router.get("/blogs/:id/edit", middleware.checkBlogOwnership, function(req, res){
 	Blog.findById(req.params.id, function(err, foundBlog){
 		res.render("blogs/edit", {blog: foundBlog});
 	});
 });
 
 //  update route
-router.put("/blogs/:id", checkBlogOwnership, function(req, res){
+router.put("/blogs/:id", middleware.checkBlogOwnership, function(req, res){
 	Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
 		if(err){
 			res.redirect("/blogs");
@@ -70,7 +71,7 @@ router.put("/blogs/:id", checkBlogOwnership, function(req, res){
 });
 
 //  delete route
-router.delete("/blogs/:id", checkBlogOwnership, function(req,res){
+router.delete("/blogs/:id", middleware.checkBlogOwnership, function(req,res){
 	Blog.findByIdAndRemove(req.params.id, function(err){
 		if(err){
 			res.redirect("/blogs");
@@ -80,30 +81,30 @@ router.delete("/blogs/:id", checkBlogOwnership, function(req,res){
 	})
 });
 
-function isLoggedIn(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	}
-	res.redirect("/login");
-}
+// function isLoggedIn(req, res, next){
+// 	if(req.isAuthenticated()){
+// 		return next();
+// 	}
+// 	res.redirect("/login");
+// }
 
-function checkBlogOwnership(req, res, next){
-		if(req.isAuthenticated()){
-		Blog.findById(req.params.id, function(err, foundBlog){
-			if(err){
-				res.redirect("back");
-			} else {
-				if(foundBlog.author.id.equals(req.user._id)){
-					next();
-				}else{
-					res.redirect("back");
-				}
-			}
-		});
-	} else {
-		res.redirect("back");
-	}
-};
+// function checkBlogOwnership(req, res, next){
+// 		if(req.isAuthenticated()){
+// 		Blog.findById(req.params.id, function(err, foundBlog){
+// 			if(err){
+// 				res.redirect("back");
+// 			} else {
+// 				if(foundBlog.author.id.equals(req.user._id)){
+// 					next();
+// 				}else{
+// 					res.redirect("back");
+// 				}
+// 			}
+// 		});
+// 	} else {
+// 		res.redirect("back");
+// 	}
+// };
 
 
 module.exports = router;
