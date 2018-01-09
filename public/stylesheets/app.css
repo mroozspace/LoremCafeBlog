@@ -24,17 +24,20 @@ textarea{
 	min-height: 50px;
 }
 
-#delete, #edit{
+/*poprawic z id na klasy w ejs*/
+.delete, .edit{
 	margin-top: 10px;
 	margin-bottom: 10px;
-	margin-left: 5%;
+	/*margin-left: 5%;*/
 	display: inline-block;
-	width: 40%;
-
+	/*width: 40%;*/
 }
 
 .button{
 	margin-top: 10px;
 	margin-bottom: 10px;
-	width: 100%;
+}
+
+.wide{
+	width: 100%
 }

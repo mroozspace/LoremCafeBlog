@@ -39,15 +39,24 @@
 				<div class="text">
 					<%= comment.text %> 
 				</div>
+
+				<a id="btn-edit" href="/blogs/<%=blog._id%>/comments/<%=comment._id%>/edit" class="mini ui button inverted orange">
+				 	Edit
+				</a>
+				<form class="delete" action="/blogs/<%=blog._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+
+					<input value="Delete" type=submit href="/blogs/<%=blog._id%>/comments/<%=comment._id%>/edit" class="mini ui button inverted red">
+				</form>
+				
 			</div>
 		<% }); %>
 
 	</div>
-	<a class="ui baisc button" href="/blogs/<%=blog._id%>/comments/new">Add Comment</a>
+	<a class="ui button wide" href="/blogs/<%=blog._id%>/comments/new">Add Comment</a>
 	<% if(currentUser && blog.author.id.equals(currentUser._id)){ %>
-		<a id="edit" class="ui orange basic button" href="/blogs/<%=blog._id%>/edit">Edit</a>
-		<form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
-			<button class="ui red basic button">Delete</button>
+		<a class="ui orange inverted button edit" href="/blogs/<%=blog._id%>/edit">Edit Post</a>
+		<form class="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+			<button class="ui red inverted button">Delete Post</button>
 		</form>
 	<% } %>
 
