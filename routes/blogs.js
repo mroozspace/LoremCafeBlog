@@ -76,6 +76,7 @@ router.delete("/blogs/:id", middleware.checkBlogOwnership, function(req,res){
 		if(err){
 			res.redirect("/blogs");
 		} else {
+			req.flash("success", "Blog post deleted.");
 			res.redirect("/blogs");
 		}
 	})

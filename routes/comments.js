@@ -65,6 +65,7 @@ router.delete("/blogs/:id/comments/:comment_id", middleware.checkCommentOwnershi
 		if(err){
 			res.redirect("back");
 		} else {
+			req.flash("success", "Comment post deleted.");
 			res.redirect("/blogs/"+req.params.id);
 		}
 	});
