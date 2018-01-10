@@ -7,6 +7,7 @@ var bodyParser 		= require("body-parser"),
 	mongoose 		= require("mongoose"),
 	Blog 			= require("./models/blog"),
 	Comment 		= require("./models/comment"),
+	url 			= "mongodb://localhost/blog-user",
 	seedDB			= require("./seeds"),
 	express 		= require("express"),
 	flash			= require("connect-flash"),
@@ -18,7 +19,7 @@ var commentRoutes	= require("./routes/comments"),
 
 // app config
 app.use(flash());
-mongoose.connect("mongodb://localhost/blog-user");
+mongoose.connect(url);
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));

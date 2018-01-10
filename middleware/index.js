@@ -10,6 +10,12 @@ middlewareObj.checkBlogOwnership = function (req, res, next){
 				req.flash("error", "Blog post not found.");
 				res.redirect("back");
 			} else {
+
+				if(!foundBlog){
+					req.flash("error", "Item not found.");
+					return res.redirect("back");
+				}
+
 				if(foundBlog.author.id.equals(req.user._id)){
 					next();
 				}else{

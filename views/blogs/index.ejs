@@ -1,35 +1,45 @@
 <% include ../partials/header %>
 
 <div id="margin"></div>
-<div class="ui main text container">
-	<div class="ui huge header">Recipes</div>
-	<div class="ui top attached segment">
-		<div class="ui divided items">
-		<% blogs.forEach(function(blog){ %>
-		<div class="item">
+	<div class="ui main text container">
 
-			<div class="image">
-				<img src='<%=blog.image%>'>
+		<h1 class="ui huge header">Articles & Recipes </h1>
+		<div class="ui search wide">
+			<div class="ui icon input wide">
+				<input id="search" onkeyup="search()" class="prompt" type="text" placeholder="Search by title...">
+			<i class="search icon"></i>
+			</div>
+				<div class="results"></div>
 			</div>
 
-			<div class="content">
-				<h2><%=blog.title%></h2>
-				<div class="meta">
-					<span><%= blog.created.toDateString() %></span>
-				</div>
-				<div class="description">
-					<p><%-blog.body%></p>
-				</div>
-				<div class="extra">
-					<a class="ui floated basic violet button" href='/blogs/<%=blog._id%>'>Więcej ...</a>
-				</div>
-			</div>
+		<div class="ui top attached segment">
+			<div class="ui divided items">
+			<% blogs.forEach(function(blog){ %>
+			<div class="item search-item">
 
+				<div class="image">
+					<img src='<%=blog.image%>'>
 				</div>
-		<% }) %>
-		</div>	
+
+				<div class="content">
+					<h2><%=blog.title%></h2>
+					<div class="meta">
+						<span><%= blog.created.toDateString() %></span>
+					</div>
+					<div class="description">
+						<p><%-blog.body.substring(0, 70)%>...</p>
+					</div>
+					<div class="extra">
+						<a class="ui floated basic violet button" href='/blogs/<%=blog._id%>'>More</a>
+					</div>
+				</div>
+
+			</div>
+			<% }) %>
+			</div>	
+		</div>
 	</div>
 </div>
-</div>
 
+<% include ../../public/scripts/search.js %>
 <% include ../partials/footer %>
